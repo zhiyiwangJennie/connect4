@@ -5,7 +5,7 @@
 #include <string>
 #include <cctype>
 using namespace std;
-
+//hello
 int main(int argc, char *argv[]) {
     cout << "Press 1 for terminal and 2 for graphics: ";
     int choice;
