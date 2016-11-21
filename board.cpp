@@ -1,6 +1,7 @@
 #include "board.h"
 
 Board::Board() {
+    //Default
 }
 
 Board::Board(const string &fen) {
