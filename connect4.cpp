@@ -6,7 +6,7 @@
 #include <cctype>
 using namespace std;
 //hello
-//command commit
+//command commit1
 int main(int argc, char *argv[]) {
     cout << "Press 1 for terminal and 2 for graphics: ";
     int choice;
