@@ -123,5 +123,3 @@ int Board::piecesInDirection(int row, int col, int dRow, int dCol) const {
 bool Board::isWin(int row, int col) const {
     return false;
 }
-
-
