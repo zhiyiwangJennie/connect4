@@ -1,5 +1,5 @@
 #include "connect4.h"
-
+#include "graphics.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,6 +7,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
+    
     cout << "Press 1 for terminal and 2 for graphics: ";
     int choice;
     while (!(cin >> choice)) {
@@ -22,10 +23,10 @@ int main(int argc, char *argv[]) {
         //graphicsPlay(argc, argv);
     }
     return 0;
+    
 }
 
 void terminalPlay(){
-    
     //name of player 1
     string p1;
     //name of player 2
@@ -36,7 +37,9 @@ void terminalPlay(){
     Result moveResult = NoResult;
     
     boardChoice = getBoard(p1, p2);
-    while ((userInput != 'q') || (moveResult != Win) || (moveResult != Draw)) {
+    while ((userInput != 'q') &&
+           ((moveResult == IllegalMove) ||
+             moveResult == NoResult)) {
         boardChoice.prettyPrintBoard(cout);
         cout << "\nEnter: the column to move, q to quit, s to save" << endl;
         //player 1's turn
@@ -65,11 +68,8 @@ void terminalPlay(){
         }
         //if user entered a column number
         else {
-            //make move if column input is valid (from col1 to col7)
-            if ((userColumn >= 1) && (userColumn <= 7)) {
-                moveResult = boardChoice.makeMove(userColumn);
-            }
-            else {
+            moveResult = boardChoice.makeMove(userColumn - 1);
+            if (moveResult == IllegalMove) {
                 cout << "ILLEGAL MOVE: Try again" << endl;
             }
         }
