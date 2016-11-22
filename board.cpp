@@ -1,7 +1,14 @@
 #include "board.h"
+#include <iostream>
+#include <fstream>
 
 Board::Board() {
-    //Default
+    for (int i = 0; i < NUM_ROWS; i++) {
+        for (int j = 0; j < NUM_COLS; j++) {
+            data[i][j] = Empty;
+        }
+    }
+    nextPlayer_to_move = Player1;
 }
 
 Board::Board(const string &fen) {
@@ -37,24 +44,62 @@ void Board::prettyPrintBoard(ostream &os) const {
     return;
 }
 
-PieceType Board::atLocation(int row, int col) {
-    return data[row][col];
-}
-
 int Board::toMove() const {
-    return 1;
+    if (nextPlayer_to_move == Player1) {
+        return 1;
+    }
+    else {
+        return 2;
+    }
 }
 
 Result Board::makeMove(int col) {
-    return NoResult;
+    int row = getFirstFreeRow(col);
+    //make valid move
+    if (inBounds(row, col)) {
+        if (toMove() == 1) {
+            data[row][col] = Player1;
+        }
+        else {
+            data[row][col] = Player2;
+        }
+        updateToMove();
+    }
+    //invalid move
+    else {
+        return IllegalMove;
+    }
+    
+    //check result of move
+    if (isWin(row, col)) {
+        return Win;
+    }
+    else if (isBoardFull()) {
+        return Draw;
+    }
+    else {
+        return NoResult;
+    }
 }
 
 int Board::getFirstFreeRow(int col) const {
+    for (int i = 0; i < NUM_ROWS; ++i) {
+        if (data[i][col] == Empty) {
+            return i;
+        }
+    }
     return NUM_ROWS;
 }
 
 PieceType Board::updateToMove() {
-    return Player1;
+    if (nextPlayer_to_move == Player1) {
+        nextPlayer_to_move = Player2;
+        return Player1;
+    }
+    else {
+        nextPlayer_to_move = Player1;
+        return Player2;
+    }
 }
 
 bool Board::isBoardFull() const {
@@ -62,7 +107,13 @@ bool Board::isBoardFull() const {
 }
 
 bool Board::inBounds(int row, int col) const {
-    return false;
+    if ((row < NUM_ROWS) && (row >= 0) &&
+        (col < NUM_COLS) && (col >= 0)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 int Board::piecesInDirection(int row, int col, int dRow, int dCol) const {
